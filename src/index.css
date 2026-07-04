@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply selection:bg-veldgold/40;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-redoxide;
+  }
+}
+
+@layer utilities {
+  /* bare, cracked ground — used in the "continuously grazed" panel */
+  .texture-cracked {
+    background-image:
+      linear-gradient(135deg, rgba(43, 36, 32, 0.08) 1px, transparent 1px),
+      linear-gradient(45deg, rgba(43, 36, 32, 0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* recovered ground — used in the "planned grazed" panel */
+  .texture-veld {
+    background-image: repeating-linear-gradient(
+      100deg,
+      rgba(92, 122, 82, 0.12) 0px,
+      rgba(92, 122, 82, 0.12) 2px,
+      transparent 2px,
+      transparent 10px
+    );
+  }
+}
