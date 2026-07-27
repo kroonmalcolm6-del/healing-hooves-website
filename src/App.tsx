@@ -18,8 +18,8 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/checkout/success" element={<CheckoutSuccess />} />
-      <Route path="/steps" element={<Steps />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/steps" element={<ProtectedRoute><Steps /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
         <Route path="clips" element={<Clips />} />
         <Route path="charts" element={<Charts />} />
