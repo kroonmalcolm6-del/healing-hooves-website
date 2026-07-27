@@ -16,12 +16,12 @@ export function Nav() {
           <span className="font-display text-base font-black text-redoxide">Healing Hooves</span>
         </Link>
         <div className="flex items-center gap-5 font-body text-sm">
-          <Link to="/steps" className="text-bone/50 transition hover:text-bone/80">The 13 Steps</Link>
+          <Link to="/steps" className="text-bone/50 transition hover:text-bone/80">The Grazing Plan</Link>
           {isAdmin && <Link to="/dashboard/clips" className="text-bone/50 transition hover:text-bone/80">Dashboard</Link>}
           {isAdmin && <Link to="/admin" className="text-redoxide/80 transition hover:text-redoxide font-semibold">Admin</Link>}
           {!user && <Link to="/login" className="text-bone/50 transition hover:text-bone/80">Member login</Link>}
           {user && <button onClick={handleSignOut} className="text-bone/35 transition hover:text-bone/60 text-xs">Sign out</button>}
-          <a href="#enquire" className="rounded-full bg-redoxide px-4 py-2 font-display font-black text-soil text-xs transition hover:bg-redoxide/90">Enquire Now</a>
+          <a href="/#enquire" className="rounded-full bg-redoxide px-4 py-2 font-display font-black text-soil text-xs transition hover:bg-redoxide/90">Enquire Now</a>
         </div>
       </nav>
     </header>

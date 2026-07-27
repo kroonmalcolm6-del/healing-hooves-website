@@ -1,7 +1,6 @@
 import { useState, FormEvent } from "react";
 import { Nav } from "../components/Nav";
 import { Footer } from "../components/Footer";
-import { useAuth } from "../lib/auth";
 
 const COURSE_TOPICS = [
   { title: "Summary of the state of the world", detail: "What we are doing is not working — and why the root cause is how we manage nature." },
@@ -34,7 +33,6 @@ const ROLAND_CREDENTIALS = [
 ];
 
 export function Home() {
-  const { user, hasAccess } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -128,27 +126,39 @@ export function Home() {
       <div className="h-px bg-soil/10 mx-8" />
 
       {/* About Roland */}
-      <section id="roland" className="bg-soil px-6 py-20 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-redoxide/55 mb-4">Your instructor</p>
-        <h2 className="font-display text-3xl sm:text-4xl font-black text-redoxide mb-1">Roland Kroon</h2>
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone/30 mb-12">Savory Institute Master Field Professional</p>
-        <div className="max-w-2xl mx-auto text-left space-y-6 font-body text-[15px] leading-[1.9] text-bone/65 mb-14">
-          <p>Roland Kroon grew up inside Holistic Management before it had fully found its name. His family farmed across South Africa and Namibia, and it was there, in the late 1960s, that his father first crossed paths with Allan Savory. When his father died in 1976, leaving his mother to manage seven farming properties, the family&apos;s education in land and livestock management became a matter of necessity — and Roland, still a child, was part of the decision-making from the start.</p>
-          <p>He returned to farm full-time in 1990, taking over Excelsior — a Karoo property that had been neglected for decades. Since then he has rebuilt it into a thriving cattle operation: 120 grazing paddocks, 68km of pipeline, and more than double the original carrying capacity, alongside a full conversion from sheep to cattle. Excelsior has been EOV certified since 2023, with beef marketed under the Land to Market label.</p>
-          <p>Along the way, Roland co-founded and ran the South African Centre for Holistic Management, was invited to speak at the international Holistic Management conference in Snowbird, Utah, and trained directly under figures like Allan Savory, Stan Parsons, Dr Terry McKosker, and Bud Williams. He later completed RCS Australia&apos;s Grazing for Profit, Executive Link, and Masterlink programmes, and spent several years running RCS&apos;s Wealth Creation courses across South Africa.</p>
-          <p>One of the projects he is proudest of: designing and running a three-year programme training sheep herders to regenerate a 24,000-hectare unfenced game reserve — believed to be the first reintegration of domestic livestock as a land management tool in a South African game reserve. That work led to co-founding the Herding Academy, where he has taught the Holistic Management curriculum to three cohorts of students.</p>
-          <p>Roland is a Savory Institute Master Field Professional — an accreditation shared with a small number of people worldwide. After 45 years in the field, he brings that depth of hands-on, hard-won experience to every course he teaches at Healing Hooves.</p>
-        </div>
-        <div className="max-w-2xl mx-auto">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone/25 mb-6">Credentials & experience</p>
-          <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-3.5 text-left">
-            {ROLAND_CREDENTIALS.map((item) => (
-              <li key={item} className="flex gap-3 font-body text-sm text-bone/60">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-redoxide" />
-                {item}
-              </li>
-            ))}
-          </ul>
+      <section id="roland" className="bg-soil px-6 py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid lg:grid-cols-[1fr_380px] gap-12 items-start">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-redoxide/55 mb-4">Your instructor</p>
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-redoxide mb-1">Roland Kroon</h2>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone/30 mb-10">Savory Institute Master Field Professional</p>
+              <div className="space-y-6 font-body text-[15px] leading-[1.9] text-bone/65 mb-12">
+                <p>Roland Kroon grew up inside Holistic Management before it had fully found its name. His family farmed across South Africa and Namibia, and it was there, in the late 1960s, that his father first crossed paths with Allan Savory. When his father died in 1976, leaving his mother to manage seven farming properties, the family&apos;s education in land and livestock management became a matter of necessity — and Roland, still a child, was part of the decision-making from the start.</p>
+                <p>He returned to farm full-time in 1990, taking over Excelsior — a Karoo property that had been neglected for decades. Since then he has rebuilt it into a thriving cattle operation: 120 grazing paddocks, 68km of pipeline, and more than double the original carrying capacity, alongside a full conversion from sheep to cattle. Excelsior has been EOV certified since 2023, with beef marketed under the Land to Market label.</p>
+                <p>Along the way, Roland co-founded and ran the South African Centre for Holistic Management, was invited to speak at the international Holistic Management conference in Snowbird, Utah, and trained directly under figures like Allan Savory, Stan Parsons, Dr Terry McKosker, and Bud Williams. He later completed RCS Australia&apos;s Grazing for Profit, Executive Link, and Masterlink programmes, and spent several years running RCS&apos;s Wealth Creation courses across South Africa.</p>
+                <p>One of the projects he is proudest of: designing and running a three-year programme training sheep herders to regenerate a 24,000-hectare unfenced game reserve — believed to be the first reintegration of domestic livestock as a land management tool in a South African game reserve. That work led to co-founding the Herding Academy, where he has taught the Holistic Management curriculum to three cohorts of students.</p>
+                <p>Roland is a Savory Institute Master Field Professional — an accreditation shared with a small number of people worldwide. After 45 years in the field, he brings that depth of hands-on, hard-won experience to every course he teaches at Healing Hooves.</p>
+              </div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone/25 mb-6">Credentials & experience</p>
+              <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-3.5">
+                {ROLAND_CREDENTIALS.map((item) => (
+                  <li key={item} className="flex gap-3 font-body text-sm text-bone/60">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-redoxide" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Roland's photo */}
+            <div className="lg:sticky lg:top-24">
+              <div className="rounded-2xl overflow-hidden border border-bone/10">
+                <img src="/roland.jpg" alt="Roland Kroon on Excelsior Farm" className="w-full object-cover" />
+              </div>
+              <p className="font-mono text-[10px] text-bone/25 mt-3 text-center uppercase tracking-wide">Roland Kroon · Excelsior Farm, Nardousberg</p>
+            </div>
+          </div>
         </div>
       </section>
 

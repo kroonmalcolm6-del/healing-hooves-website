@@ -56,7 +56,7 @@ export function Steps() {
       <Nav />
       <div className="mx-auto max-w-6xl px-6 py-12">
         <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-healed mb-2">Member resources</p>
-        <h1 className="font-display text-3xl font-black text-soil mb-1">The 13 Steps</h1>
+        <h1 className="font-display text-3xl font-black text-soil mb-1">The Grazing Plan</h1>
         <p className="font-body text-sm text-soil/55 mb-8">Work through the Open Season steps first, then the Closed Season steps.</p>
 
         {error && <div className="rounded-xl bg-red-50 border border-red-200 p-4 mb-6 font-body text-sm text-red-700">Error: {error}</div>}
