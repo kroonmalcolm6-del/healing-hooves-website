@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/auth";
 
 export function Nav() {
-  const { user, hasAccess, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
   const handleSignOut = async () => { await signOut(); navigate("/"); };
 
@@ -17,9 +17,7 @@ export function Nav() {
         </Link>
         <div className="flex items-center gap-5 font-body text-sm">
           <Link to="/steps" className="text-bone/50 transition hover:text-bone/80">The 13 Steps</Link>
-          <a href="#course" className="text-bone/50 transition hover:text-bone/80">The Course</a>
-          <a href="#roland" className="text-bone/50 transition hover:text-bone/80">About Roland</a>
-          {user && hasAccess && <Link to="/dashboard/clips" className="text-bone/50 transition hover:text-bone/80">Dashboard</Link>}
+          {isAdmin && <Link to="/dashboard/clips" className="text-bone/50 transition hover:text-bone/80">Dashboard</Link>}
           {isAdmin && <Link to="/admin" className="text-redoxide/80 transition hover:text-redoxide font-semibold">Admin</Link>}
           {!user && <Link to="/login" className="text-bone/50 transition hover:text-bone/80">Member login</Link>}
           {user && <button onClick={handleSignOut} className="text-bone/35 transition hover:text-bone/60 text-xs">Sign out</button>}
