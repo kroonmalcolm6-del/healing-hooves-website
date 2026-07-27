@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import { Nav } from "../components/Nav";
 import { useAuth } from "../lib/auth";
 
@@ -7,6 +8,7 @@ export function Signup() {
   const { signUp } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,7 @@ export function Signup() {
           <p className="font-body text-sm leading-relaxed text-soil/60 mb-6">
             Welcome to Healing Hooves. Your account has been created successfully.
             Please wait while the administrator grants you access to the course material —
-            you will be able to log in and view the 13 Steps once your account has been approved.
+            you will be able to log in and view the Grazing Plan once your account has been approved.
           </p>
           <p className="font-body text-sm text-soil/40">
             Already approved?{" "}
@@ -65,8 +67,14 @@ export function Signup() {
           </div>
           <div>
             <label className="font-mono text-[10px] uppercase tracking-wide text-soil/50">Password</label>
-            <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-soil/15 bg-white px-4 py-3 font-body text-sm text-soil outline-none focus:border-redoxide" />
+            <div className="relative mt-1">
+              <input type={showPassword ? "text" : "password"} required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-soil/15 bg-white px-4 py-3 pr-11 font-body text-sm text-soil outline-none focus:border-redoxide" />
+              <button type="button" onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-soil/40 hover:text-soil transition">
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
           {error && <p className="font-body text-sm text-red-600">{error}</p>}
           <button type="submit" disabled={loading}
