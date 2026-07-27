@@ -27,7 +27,13 @@ export function Login() {
     <div className="min-h-screen bg-bone">
       <Nav />
       <div className="mx-auto max-w-sm px-6 py-20">
-        <h1 className="font-display text-2xl font-black text-soil mb-8">Member login</h1>
+        <h1 className="font-display text-2xl font-black text-soil mb-2">Member login</h1>
+        <p className="font-body text-sm text-soil/50 mb-8">
+          New member?{" "}
+          <Link to="/signup" className="text-redoxide underline-offset-4 hover:underline">
+            Create an account here
+          </Link>
+        </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="font-mono text-[10px] uppercase tracking-wide text-soil/50">Email</label>
