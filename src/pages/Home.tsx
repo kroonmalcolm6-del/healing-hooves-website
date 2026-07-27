@@ -156,7 +156,7 @@ export function Home() {
               <div className="rounded-2xl overflow-hidden border border-bone/10">
                 <img src="/roland.jpg" alt="Roland Kroon on Excelsior Farm" className="w-full object-cover" />
               </div>
-              <p className="font-mono text-[10px] text-bone/25 mt-3 text-center uppercase tracking-wide">Roland Kroon · Excelsior Farm, Nardousberg</p>
+              <p className="font-mono text-[10px] text-bone/25 mt-3 text-center uppercase tracking-wide">Roland Kroon · Excelsior Farm, Eastern Cape</p>
             </div>
           </div>
         </div>
