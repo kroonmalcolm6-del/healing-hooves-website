@@ -13,6 +13,21 @@ interface UserRow {
 }
 interface PendingRow { email: string; note: string; created_at: string; }
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+
+async function callAdmin(body: object, token: string) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/admin-action`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  });
+  return res.json();
+}
+
 export function Admin() {
   const { user, isAdmin, loading } = useAuth();
   const [users, setUsers] = useState<UserRow[]>([]);
@@ -24,11 +39,21 @@ export function Admin() {
   const [granting, setGranting] = useState(false);
   const [grantMsg, setGrantMsg] = useState<string | null>(null);
 
+  const getToken = async () => {
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token ?? "";
+  };
+
   const loadUsers = async () => {
     setLoadingData(true); setError(null);
-    const { data, error: err } = await supabase.functions.invoke("admin-action", { body: { action: "list" } });
-    if (err || !data) { setError("Could not load users. Deploy the admin-action edge function first."); }
-    else { setUsers(data.users ?? []); setPending(data.pendingPreApproved ?? []); }
+    try {
+      const token = await getToken();
+      const data = await callAdmin({ action: "list" }, token);
+      if (data.error) { setError(data.error); }
+      else { setUsers(data.users ?? []); setPending(data.pendingPreApproved ?? []); }
+    } catch (e) {
+      setError("Could not connect to admin function.");
+    }
     setLoadingData(false);
   };
 
@@ -38,20 +63,25 @@ export function Admin() {
     e.preventDefault();
     if (!grantEmail.trim()) return;
     setGranting(true); setGrantMsg(null);
-    const { data, error: err } = await supabase.functions.invoke("admin-action", {
-      body: { action: "grant", email: grantEmail.trim(), note: grantNote.trim() || "Manual grant" }
-    });
-    setGranting(false);
-    if (err || !data?.ok) { setGrantMsg("Failed — deploy the edge function first."); }
-    else {
-      setGrantMsg(data.signedUp ? `Access granted to ${grantEmail}.` : `${grantEmail} pre-approved — access activates when they sign up.`);
-      setGrantEmail(""); setGrantNote(""); loadUsers();
+    try {
+      const token = await getToken();
+      const data = await callAdmin({ action: "grant", email: grantEmail.trim(), note: grantNote.trim() || "Manual grant" }, token);
+      if (data.ok) {
+        setGrantMsg(data.signedUp ? `Access granted to ${grantEmail}.` : `${grantEmail} pre-approved — access activates when they sign up.`);
+        setGrantEmail(""); setGrantNote(""); loadUsers();
+      } else {
+        setGrantMsg(`Failed: ${data.error}`);
+      }
+    } catch (e) {
+      setGrantMsg("Failed to connect.");
     }
+    setGranting(false);
   };
 
   const handleRevoke = async (userId: string, email: string) => {
     if (!confirm(`Revoke access for ${email}?`)) return;
-    await supabase.functions.invoke("admin-action", { body: { action: "revoke", userId, email } });
+    const token = await getToken();
+    await callAdmin({ action: "revoke", userId, email }, token);
     loadUsers();
   };
 
@@ -77,7 +107,7 @@ export function Admin() {
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-10">
-          {[{ label: "Total accounts", value: users.length }, { label: "Have access", value: withAccess.length }, { label: "Pre-approved (pending signup)", value: pending.length }].map((s) => (
+          {[{ label: "Total accounts", value: users.length }, { label: "Have access", value: withAccess.length }, { label: "Pre-approved", value: pending.length }].map((s) => (
             <div key={s.label} className="rounded-xl bg-white border border-soil/[0.08] p-5">
               <p className="font-mono text-[10px] uppercase tracking-wide text-soil/40 mb-1">{s.label}</p>
               <p className="font-display text-3xl font-black text-soil">{s.value}</p>
@@ -102,32 +132,6 @@ export function Admin() {
         </div>
 
         {error && <div className="rounded-xl bg-red-50 border border-red-200 p-4 mb-6 font-body text-sm text-red-700">{error}</div>}
-
-        {pending.length > 0 && (
-          <div className="mb-8">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-soil/40 mb-3">Pre-approved — awaiting signup</p>
-            <div className="rounded-xl border border-soil/[0.08] overflow-hidden">
-              <table className="w-full text-left font-body text-sm">
-                <thead className="bg-soil/[0.03]"><tr>
-                  <th className="px-4 py-3 font-medium text-soil/50 text-xs uppercase tracking-wide">Email</th>
-                  <th className="px-4 py-3 font-medium text-soil/50 text-xs uppercase tracking-wide">Note</th>
-                  <th className="px-4 py-3 font-medium text-soil/50 text-xs uppercase tracking-wide">Date</th>
-                  <th className="px-4 py-3" />
-                </tr></thead>
-                <tbody>
-                  {pending.map((p) => (
-                    <tr key={p.email} className="border-t border-soil/[0.06]">
-                      <td className="px-4 py-3 text-soil">{p.email}</td>
-                      <td className="px-4 py-3 text-soil/50">{p.note || "—"}</td>
-                      <td className="px-4 py-3 text-soil/45 text-xs">{new Date(p.created_at).toLocaleDateString()}</td>
-                      <td className="px-4 py-3 text-right"><button onClick={() => handleRevoke("", p.email)} className="font-body text-xs text-soil/35 hover:text-red-500 transition">Remove</button></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
 
         {loadingData ? <p className="font-mono text-sm text-soil/40">Loading users…</p> : (
           <>
