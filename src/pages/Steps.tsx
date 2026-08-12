@@ -14,7 +14,7 @@ interface StepVideo {
   sort_order: number;
 }
 
-type Tab = "intro" | "open" | "closed";
+type Tab = "intro" | "open" | "closed" | "revisions";
 
 export function Steps() {
   const [videos, setVideos] = useState<StepVideo[]>([]);
@@ -49,7 +49,15 @@ export function Steps() {
     { key: "intro", label: "Introduction" },
     { key: "open", label: "Open Season" },
     { key: "closed", label: "Closed Season" },
+    { key: "revisions", label: "Revisions & Updates" },
   ];
+
+  const getSectionLabel = (v: StepVideo) => {
+    if (v.section === "intro") return "Introduction";
+    if (v.section === "open") return `Open Season · Step ${v.step_number}`;
+    if (v.section === "closed") return `Closed Season · Step ${v.step_number}`;
+    return "Revisions & Updates";
+  };
 
   return (
     <div className="min-h-screen bg-bone">
@@ -65,7 +73,7 @@ export function Steps() {
 
         {!loading && videos.length > 0 && (
           <>
-            <div className="flex gap-1 border-b border-soil/10 mb-8">
+            <div className="flex flex-wrap gap-1 border-b border-soil/10 mb-8">
               {tabs.map((tab) => (
                 <button key={tab.key} onClick={() => handleTabChange(tab.key)}
                   className={`px-5 py-2.5 font-display font-black text-sm transition rounded-t-lg ${activeTab === tab.key ? "bg-soil text-redoxide" : "text-soil/45 hover:text-soil"}`}>
@@ -81,13 +89,13 @@ export function Steps() {
                     <video key={selected.id} src={selected.public_url} controls controlsList="nodownload"
                       onContextMenu={(e) => e.preventDefault()} className="aspect-video w-full" />
                   ) : (
-                    <div className="flex aspect-video items-center justify-center font-mono text-sm text-bone/50">Select a step</div>
+                    <div className="flex aspect-video items-center justify-center font-mono text-sm text-bone/50">Select a video</div>
                   )}
                 </div>
                 {selected && (
                   <div className="mt-4">
                     <p className="font-mono text-[10px] uppercase tracking-wide text-redoxide mb-1">
-                      {selected.section === "intro" ? "Introduction" : selected.section === "open" ? `Open Season · Step ${selected.step_number}` : `Closed Season · Step ${selected.step_number}`}
+                      {getSectionLabel(selected)}
                     </p>
                     <p className="font-display font-black text-xl text-soil">{selected.title}</p>
                   </div>
@@ -100,7 +108,7 @@ export function Steps() {
                     <button onClick={() => setSelected(video)}
                       className={`flex w-full items-start gap-3 rounded-xl px-3 py-3 text-left transition ${selected?.id === video.id ? "bg-soil" : "hover:bg-soil/5"}`}>
                       <span className={`font-mono text-[10px] mt-1 min-w-[20px] font-bold ${selected?.id === video.id ? "text-redoxide" : "text-soil/35"}`}>
-                        {video.section === "intro" ? "▶" : String(video.step_number).padStart(2, "0")}
+                        {video.section === "intro" || video.section === "revisions" ? "▶" : String(video.step_number).padStart(2, "0")}
                       </span>
                       <span className={`font-display font-bold text-sm ${selected?.id === video.id ? "text-redoxide" : "text-soil"}`}>
                         {video.title}
