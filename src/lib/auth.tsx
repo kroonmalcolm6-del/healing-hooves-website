@@ -14,7 +14,7 @@ interface AuthContextValue {
   signOut: () => Promise<void>;
 }
 
-const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL as string | undefined;
+const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAIL as string ?? '').split(',').map((e: string) => e.trim().toLowerCase()).filter(Boolean);
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
   const signOut = async () => { await supabase.auth.signOut(); };
   const refreshAccess = async () => { await checkAccess(session?.user.id, session?.user.email); };
-  const isAdmin = Boolean(session?.user?.email && ADMIN_EMAIL && session.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+  const isAdmin = Boolean(session?.user?.email && ADMIN_EMAILS.includes(session.user.email.toLowerCase()));
 
   return (
     <AuthContext.Provider value={{ session, user: session?.user ?? null, hasAccess, isAdmin, loading, refreshAccess, signUp, signIn, signOut }}>
