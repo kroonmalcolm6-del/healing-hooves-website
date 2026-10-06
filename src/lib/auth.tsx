@@ -14,7 +14,7 @@ interface AuthContextValue {
   signOut: () => Promise<void>;
 }
 
-const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAIL as string ?? '').split(',').map((e: string) => e.trim().toLowerCase()).filter(Boolean);
+const ADMIN_EMAILS = (import.meta.env.VITE_ADMINS as string ?? '').split(',').map((e: string) => e.trim().toLowerCase()).filter(Boolean);
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
